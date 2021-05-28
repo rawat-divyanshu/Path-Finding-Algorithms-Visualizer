@@ -1,7 +1,7 @@
 .node {
   width: 30px;
   height: 30px;
-  border: 1px solid black;
+  outline: 1px solid rgb(175, 216, 248);
 }
 
 .start-node {
@@ -10,4 +10,8 @@
 
 .end-node {
   background-color: red;
+}
+
+.wall-node {
+  background-color: rgb(12, 53, 71);
 }
