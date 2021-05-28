@@ -6,15 +6,15 @@ import "./PathFind.css";
 const cols = 40;
 const rows = 18;
 
-const NODE_START_ROW = 0;
-const NODE_START_COL = 0;
-
-const NODE_END_ROW = rows - 1;
-const NODE_END_COL = cols - 1;
-
 const PathFind = () => {
   const [Grid, setGrid] = useState([]);
   const [mouseIsPressed, setMouseIsPressed] = useState(false);
+  const [isStartSelected, setIsStartSelected] = useState(false);
+  const [isFinishSelected, setIsFinishSelected] = useState(false);
+  const [NODE_START_ROW, set_NODE_START_ROW] = useState(0);
+  const [NODE_START_COL, set_NODE_START_COL] = useState(0);
+  const [NODE_FINISH_ROW, set_NODE_FINISH_ROW] = useState(rows - 1);
+  const [NODE_FINISH_COL, set_NODE_FINISH_COL] = useState(cols - 1);
 
   useEffect(() => {
     initializeGrid();
@@ -45,7 +45,8 @@ const PathFind = () => {
     this.row = i;
     this.col = j;
     this.isStart = this.row === NODE_START_ROW && this.col === NODE_START_COL;
-    this.isFinish = this.row === NODE_END_ROW && this.col === NODE_END_COL;
+    this.isFinish =
+      this.row === NODE_FINISH_ROW && this.col === NODE_FINISH_COL;
     this.distance = Infinity;
     this.isVisited = false;
     this.isWall = false;
@@ -53,19 +54,34 @@ const PathFind = () => {
   }
 
   const handleMouseDown = (row, col) => {
-    const newGrid = getNewGridWithWallToggled(Grid, row, col);
-    setGrid(newGrid);
+    if (row === NODE_START_ROW && col === NODE_START_COL) {
+      setIsStartSelected(true);
+    } else if (row === NODE_FINISH_ROW && col === NODE_FINISH_COL) {
+      setIsFinishSelected(true);
+    } else {
+      const newGrid = getNewGridWithWallToggled(Grid, row, col);
+      setGrid(newGrid);
+    }
+
     setMouseIsPressed(true);
   };
 
   const handleMouseEnter = (row, col) => {
     if (!mouseIsPressed) return;
-    const newGrid = getNewGridWithWallToggled(Grid, row, col);
-    setGrid(newGrid);
+    if (isStartSelected) {
+      changeStartNode(Grid, row, col);
+    } else if (isFinishSelected) {
+      changeFinishNode(Grid, row, col);
+    } else {
+      const newGrid = getNewGridWithWallToggled(Grid, row, col);
+      setGrid(newGrid);
+    }
   };
 
   const handleMouseUp = () => {
     setMouseIsPressed(false);
+    setIsStartSelected(false);
+    setIsFinishSelected(false);
   };
 
   const gridWithNode = (
@@ -102,7 +118,56 @@ const PathFind = () => {
       isWall: !node.isWall,
     };
     newGrid[row][col] = newNode;
-    console.log(newGrid);
+    return newGrid;
+  };
+
+  const changeStartNode = (grid, row, col) => {
+    if (row === NODE_FINISH_ROW && col === NODE_FINISH_COL) return;
+    if (row === NODE_START_ROW && col === NODE_START_COL) return;
+    const newGrid = grid.slice();
+    const oldStart = newGrid[NODE_START_ROW][NODE_START_COL];
+    const resetedOldStart = {
+      ...oldStart,
+      isWall: false,
+      isStart: false,
+    };
+    newGrid[NODE_START_ROW][NODE_START_COL] = resetedOldStart;
+    const newStart = newGrid[row][col];
+    const setNewStart = {
+      ...newStart,
+      isWall: false,
+      isStart: true,
+    };
+    newGrid[row][col] = setNewStart;
+
+    set_NODE_START_ROW(row);
+    set_NODE_START_COL(col);
+
+    return newGrid;
+  };
+
+  const changeFinishNode = (grid, row, col) => {
+    if (row === NODE_FINISH_ROW && col === NODE_FINISH_COL) return;
+    if (row === NODE_START_ROW && col === NODE_START_COL) return;
+    const newGrid = grid.slice();
+    const oldFinish = newGrid[NODE_FINISH_ROW][NODE_FINISH_COL];
+    const resetedOldFinish = {
+      ...oldFinish,
+      isWall: false,
+      isFinish: false,
+    };
+    newGrid[NODE_FINISH_ROW][NODE_FINISH_COL] = resetedOldFinish;
+    const newFinish = newGrid[row][col];
+    const setNewFinish = {
+      ...newFinish,
+      isWall: false,
+      isFinish: true,
+    };
+    newGrid[row][col] = setNewFinish;
+
+    set_NODE_FINISH_ROW(row);
+    set_NODE_FINISH_COL(col);
+
     return newGrid;
   };
 
