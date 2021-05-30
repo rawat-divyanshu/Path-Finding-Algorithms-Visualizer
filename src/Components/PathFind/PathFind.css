@@ -1,8 +1,63 @@
 .wrapper {
-  max-width: 80%;
+  max-width: 90%;
   margin: auto;
 }
 
 .rowWrapper {
   display: flex;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #0e86d4;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.nav-button {
+  margin-left: 10px;
+  background: #4cbd07;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 1px;
+  cursor: pointer;
+  padding: 10px 10px;
+  font-size: 15px;
+}
+
+.nav-button:hover,
+.nav-button:focus {
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #27ae60;
+}
+
+.leftMargin {
+  margin-left: auto;
+}
+
+.notation {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 15% 0 15%;
+  margin-bottom: 20px;
+}
+
+.notation-element {
+  display: flex;
+}
+
+.static-node {
+  width: 25px;
+  height: 25px;
+  outline: 1px solid rgb(175, 216, 248);
+  margin-right: 15px;
+}
+
+.nav-title {
+  color: #ffffff;
+  font-family: "Bree Serif", serif;
+  font-size: 30px;
 }

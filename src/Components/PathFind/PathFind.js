@@ -12,8 +12,8 @@ import {
   getNodesInShortestPathOrder,
 } from "./../../Algorithms/Djikstra/Djikstra";
 
-const cols = 40;
-const rows = 18;
+const cols = 55;
+const rows = 23;
 
 const PathFind = () => {
   const [Grid, setGrid] = useState([]);
@@ -27,7 +27,7 @@ const PathFind = () => {
 
   useEffect(() => {
     initializeGrid();
-  });
+  }, []);
 
   const initializeGrid = () => {
     const grid = new Array(rows);
@@ -173,14 +173,14 @@ const PathFind = () => {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
           animateShortestPath(nodesInShortestPathOrder);
-        }, 10 * i);
+        }, 5 * i);
         return;
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
           "node node-visited";
-      }, 10 * i);
+      }, 5 * i);
     }
   };
 
@@ -190,7 +190,7 @@ const PathFind = () => {
         const node = nodesInShortestPathOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
           "node node-shortest-path";
-      }, 50 * i);
+      }, 10 * i);
     }
   };
 
@@ -243,31 +243,49 @@ const PathFind = () => {
   };
 
   return (
-    <div className="wrapper">
-      <h1>Path Finding Algorithm Visualizer</h1>
-      <div style={{ display: "flex" }}>
-        <button
-          style={{ marginBottom: "20px" }}
-          onClick={() => visualizeDijkstra()}
-        >
+    <>
+      <nav className="navbar">
+        <h1 className="nav-title">Pathfinding Algorithm Visualizer</h1>
+        <div className="leftMargin" />
+        <button className="nav-button" onClick={() => visualizeDijkstra()}>
           Visualize Dijkstra's Algorithm
         </button>
-        <button
-          style={{ marginBottom: "20px" }}
-          onClick={() => visualizeAstar()}
-        >
+        <button className="nav-button" onClick={() => visualizeAstar()}>
           Visualize AStar Algorithm
         </button>
-        <button style={{ marginBottom: "20px" }} onClick={() => clearPath()}>
+        <button className="nav-button" onClick={() => clearPath()}>
           Clear Path
         </button>
-        <button style={{ marginBottom: "20px" }} onClick={() => clearBoard()}>
+        <button className="nav-button" onClick={() => clearBoard()}>
           Clear Board
         </button>
+      </nav>
+      <div className="wrapper">
+        <ul className="notation">
+          <li className="notation-element">
+            <div className="static-node start-node" />
+            Start Point
+          </li>
+          <li className="notation-element">
+            <div className="static-node end-node" />
+            End Point
+          </li>
+          <li className="notation-element">
+            <div className="static-node wall-node" />
+            Wall
+          </li>
+          <li className="notation-element">
+            <div className="static-node node-visited-static" />
+            Visited Nodes
+          </li>
+          <li className="notation-element">
+            <div className="static-node node-shortest-path-static" />
+            Final Path
+          </li>
+        </ul>
+        {gridWithNode}
       </div>
-
-      {gridWithNode}
-    </div>
+    </>
   );
 };
 
